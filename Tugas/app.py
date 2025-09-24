@@ -21,6 +21,14 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
+# Tambahan biar bisa lihat train & test
+st.write("### Jumlah Data Training:", len(X_train))
+st.write("### Jumlah Data Testing:", len(X_test))
+st.write("### Data Training (5 baris pertama)")
+st.write(X_train[:5])
+st.write("### Data Testing (5 baris pertama)")
+st.write(X_test[:5])
+
 # 4. Train model
 clf = DecisionTreeClassifier(random_state=42)
 clf.fit(X_train, y_train)
@@ -29,6 +37,19 @@ clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
 st.write("### Akurasi:", round(accuracy_score(y_test, y_pred)*100, 2), "%")
 st.text("Classification Report:\n" + classification_report(y_test, y_pred))
+
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+# 5b. Confusion Matrix
+cm = confusion_matrix(y_test, y_pred)
+
+st.write("### Confusion Matrix (Tabel)")
+st.write(cm)
+
+st.write("### Confusion Matrix (Visualisasi)")
+fig_cm, ax_cm = plt.subplots()
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Tidak Diabetes","Diabetes"])
+disp.plot(ax=ax_cm, cmap="Blues", colorbar=False)
+st.pyplot(fig_cm)
 
 # 6. Visualisasi
 st.write("### Visualisasi Pohon Keputusan")
